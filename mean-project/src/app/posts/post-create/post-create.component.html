@@ -1,8 +1,11 @@
 <mat-card>
     <mat-form-field>
+        <input matInput type="text" [(ngModel)]="enteredTitle" placeholder="Post Title" #titleInput>
+    </mat-form-field>
+    <mat-form-field>
         <!-- User input for a new post -->
         <!-- Use ngModel for two-way binding -->
-        <textarea matInput rows="6" [(ngModel)]="enteredValue"></textarea>
+        <textarea matInput rows="6" [(ngModel)]="enteredContent" placeholder="Post Content" #contentInput></textarea>
     </mat-form-field>
     <!-- Button for saving a post -->
     <button 

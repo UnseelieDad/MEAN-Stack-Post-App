@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'mean-project';
+  storedPosts = [];
+
+  // Add type checking later
+  // gets post from post-create component to send to post lists
+  onPostAdded(post) {
+    this.storedPosts.push(post);
+  }
 }
