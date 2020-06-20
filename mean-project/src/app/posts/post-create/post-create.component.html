@@ -1,16 +1,37 @@
 <mat-card>
-    <mat-form-field>
-        <input matInput type="text" [(ngModel)]="enteredTitle" placeholder="Post Title" #titleInput>
-    </mat-form-field>
-    <mat-form-field>
-        <!-- User input for a new post -->
-        <!-- Use ngModel for two-way binding -->
-        <textarea matInput rows="6" [(ngModel)]="enteredContent" placeholder="Post Content" #contentInput></textarea>
-    </mat-form-field>
-    <!-- Button for saving a post -->
-    <button 
-        mat-raised-button 
-        (click)="onAddPost()"
-        color="accent">
-    Save Post</button>
+    <!-- Local reference allows access to the form object in ts -->
+    <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+        <mat-form-field>
+            <input 
+                matInput 
+                type="text"
+                name="title"
+                ngModel
+                required  
+                placeholder="Post Title"
+                #title="ngModel">
+            <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <!-- User input for a new post -->
+            <!-- Use ngModel for two-way binding -->
+            <textarea 
+                matInput 
+                rows="6"
+                name="content"
+                ngModel
+                required  
+                placeholder="Post Content" 
+                #content="ngModel"
+                >
+            </textarea>
+            <mat-error *ngIf="content.invalid">Please enter post content.</mat-error>
+        </mat-form-field>
+        <!-- Button for saving a post -->
+        <button 
+            mat-raised-button 
+            type="submit"
+            color="accent">
+        Save Post</button>
+    </form>
 </mat-card>
