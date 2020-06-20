@@ -1,8 +1,15 @@
-<!-- User input for a new post -->
-<!-- Use ngModel for two-way binding -->
-<textarea rows="6" [(ngModel)]="enteredValue"></textarea>
-<hr>
-<!-- Button for saving a post -->
-<button (click)="onAddPost()">Save Post</button>
+<mat-card>
+    <mat-form-field>
+        <!-- User input for a new post -->
+        <!-- Use ngModel for two-way binding -->
+        <textarea matInput rows="6" [(ngModel)]="enteredValue"></textarea>
+    </mat-form-field>
+    <!-- Button for saving a post -->
+    <button 
+        mat-raised-button 
+        (click)="onAddPost()"
+        color="accent">
+    Save Post</button>
+</mat-card>
 <!-- Output message on saving post -->
 <p>{{ newPost }}</p>
