@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, subscribeOn } from 'rxjs/operators';
 
 import { Post } from './post.model';
 
@@ -14,7 +14,7 @@ export class PostsService {
   private postsUpdated = new Subject<Post[]>();
 
   constructor(private http: HttpClient) {}
-  
+   
   // Get the current list of posts from the server
   getPosts() {
     this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
@@ -35,6 +35,13 @@ export class PostsService {
         // update subject with new posts
         this.postsUpdated.next([...this.posts]);
       });
+  }
+
+  // Get a post by its id
+  getPostById(id: string) {
+    // Can only return the observable here,
+    // the rest is handled in post-create component
+    return this.http.get<{_id: string, title: string, content: string}>('http://localhost:3000/api/posts/' + id);
   }
 
   // return the postsUpdated subject for subscribing
@@ -58,6 +65,21 @@ export class PostsService {
         // Only update posts locally if successfully added to the server
         this.posts.push(post);
         // update subject withth new post
+        this.postsUpdated.next([...this.posts]);
+      });
+  }
+
+  // Update a post after editing
+  updatePost(id: string, title: string, content: string) {
+    const post: Post = { id, title, content };
+    this.http.patch('http://localhost:3000/api/posts/' + id, post)
+      .subscribe(response => {
+        // If updaing on the backend is successful, update the post by its index
+        // in the frontend array.
+        const updatedPosts = [...this.posts];
+        const oldPostInex = updatedPosts.findIndex(p => p.id === post.id);
+        updatedPosts[oldPostInex] = post;
+        this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
       });
   }

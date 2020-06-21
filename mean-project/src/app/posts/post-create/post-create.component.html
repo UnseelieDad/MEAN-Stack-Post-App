@@ -1,25 +1,26 @@
 <mat-card>
     <!-- Local reference allows access to the form object in ts -->
     <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+        <!-- User input for a new or edited post -->
         <mat-form-field>
+            <!-- Use '?' in the binds for title and content to make sure angular checks 
+            if the values exist. If they don't, populate the fields with nothing. -->
             <input 
                 matInput 
                 type="text"
                 name="title"
-                ngModel
+                [ngModel]="post?.title"
                 required  
                 placeholder="Post Title"
                 #title="ngModel">
             <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
         </mat-form-field>
         <mat-form-field>
-            <!-- User input for a new post -->
-            <!-- Use ngModel for two-way binding -->
             <textarea 
                 matInput 
                 rows="6"
                 name="content"
-                ngModel
+                [ngModel]="post?.content"
                 required  
                 placeholder="Post Content" 
                 #content="ngModel"

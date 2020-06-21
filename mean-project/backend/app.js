@@ -36,7 +36,7 @@ app.use((req, res, next) => {
     );
     // Allow listed HTTP methods
     // May need to add PUT here later
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     next();
 });
 
@@ -74,6 +74,35 @@ app.get('/api/posts', (req, res, next) => {
         })
         .catch(errors => {
             console.log(errors);
+        });
+});
+
+app.get('/api/posts/:id', (req, res, next) => {
+    Post.findById(req.params.id)
+        .then(post => {
+            if (post) {
+                res.status(200).json(post);
+            } else {
+                res.status(404).json({
+                    message: 'Post not found!'
+                });
+            }
+        });
+});
+
+// update a specific post in the database by its id segment
+app.patch("/api/posts/:id", (req, res, next) => {
+    const post = new Post({
+        _id: req.body.id,
+        title: req.body.title,
+        content: req.body.content
+    });
+    Post.updateOne({ _id: req.params.id }, post)
+        .then(result => {
+            console.log(result);
+            res.status(200).json({
+                message: 'Post Updated!'
+            });
         });
 });
 
