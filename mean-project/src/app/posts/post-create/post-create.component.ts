@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
@@ -14,27 +14,41 @@ export class PostCreateComponent implements OnInit{
   private postId: string;
   post: Post;
   isLoading = false;
+  form: FormGroup;
 
   constructor(private postsService: PostsService, private route: ActivatedRoute) {}
 
   // function  for adding a post to the site
-  onAddPost(form: NgForm) {
-    if (form.valid){
+  onAddPost() {
+    if (this.form.valid){
       // Start loading spinner
       this.isLoading = true;
       if (this.mode === 'create') {
-        this.postsService.addPost(form.value.title, form.value.content);
+        this.postsService.addPost(this.form.value.title, this.form.value.content);
       } else {
-        this.postsService.updatePost(this.postId, form.value.title, form.value.content);
+        this.postsService.updatePost(
+          this.postId, 
+          this.form.value.title, 
+          this.form.value.content
+        );
       }
-    
-      form.resetForm();
+
+      this.form.reset();
     } else {
       return;
     }
   }
 
   ngOnInit() {
+    // A reactive form to use for validating posts
+    // Initial values are null unless the post is being edited
+    this.form = new FormGroup({
+      'title': new FormControl(null, { 
+        validators: [Validators.required, Validators.minLength(3)]
+      }),
+      'content': new FormControl(null, { validators: [Validators.required] })
+    });
+    
     // Param map is a built in observable
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       // Check for a post id in the route path for editing
@@ -48,7 +62,16 @@ export class PostCreateComponent implements OnInit{
         this.postsService.getPostById(this.postId).subscribe(postData => {
           // stop progress spinner
           this.isLoading = false;
-          this.post = { id: postData._id, title: postData.title, content: postData.content }
+          this.post = { 
+            id: postData._id, 
+            title: postData.title, 
+            content: postData.content 
+          }
+          // Set form values to old post values when editing
+          this.form.setValue({ 
+            'title': this.post.title, 
+            'content': this.post.content 
+          });
         });
       } else {
         // If there's no id, just make a new post

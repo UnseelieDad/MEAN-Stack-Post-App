@@ -1,7 +1,6 @@
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <!-- Local reference allows access to the form object in ts -->
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+    <form [formGroup]="form" (submit)="onAddPost()" *ngIf="!isLoading">
         <!-- Post Title -->
         <mat-form-field>
             <!-- Use '?' in the binds for title and content to make sure angular checks 
@@ -9,12 +8,10 @@
             <input 
                 matInput 
                 type="text"
-                name="title"
-                [ngModel]="post?.title"
-                required  
+                formControlName="title"
                 placeholder="Post Title"
-                #title="ngModel">
-            <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
+            >
+            <mat-error *ngIf="form.get('title').invalid">Please enter a post title.</mat-error>
         </mat-form-field>
         <!-- Image Upload -->
         <div>
@@ -26,14 +23,11 @@
             <textarea 
                 matInput 
                 rows="6"
-                name="content"
-                [ngModel]="post?.content"
-                required  
+                formControlName="content"
                 placeholder="Post Content" 
-                #content="ngModel"
                 >
             </textarea>
-            <mat-error *ngIf="content.invalid">Please enter post content.</mat-error>
+            <mat-error *ngIf="form.get('content').invalid">Please enter post content.</mat-error>
         </mat-form-field>
         <!-- Button for saving a post -->
         <button 
