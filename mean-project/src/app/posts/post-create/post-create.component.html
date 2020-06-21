@@ -2,7 +2,7 @@
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <!-- Local reference allows access to the form object in ts -->
     <form (submit)="onAddPost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
-        <!-- User input for a new or edited post -->
+        <!-- Post Title -->
         <mat-form-field>
             <!-- Use '?' in the binds for title and content to make sure angular checks 
             if the values exist. If they don't, populate the fields with nothing. -->
@@ -16,6 +16,12 @@
                 #title="ngModel">
             <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
         </mat-form-field>
+        <!-- Image Upload -->
+        <div>
+            <button mat-stroked-button type="button" color="primary" (click)="filePicker.click()">Pick Image</button>
+            <input type="file" #filePicker>
+        </div>
+        <!-- Post Content -->
         <mat-form-field>
             <textarea 
                 matInput 
