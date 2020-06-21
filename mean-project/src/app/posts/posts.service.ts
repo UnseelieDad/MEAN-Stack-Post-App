@@ -62,7 +62,7 @@ export class PostsService {
     this.http
       .post<{message: string, post: Post}>('http://localhost:3000/api/posts', postData)
       .subscribe((responseData) => {
-        const post: Post = { 
+        const post: Post = {
           id: responseData.post.id,
           title,
           content,
