@@ -1,10 +1,10 @@
 const express = require('express');
 // Use multer to handle image uploading
 const multer = require('multer');
-
 // Import post model
 const Post = require('../models/post');
-const { create } = require('../models/post');
+// custom middleware for verifying a jwt 
+const checkAuth = require('../middleware/check-auth');
 
 // use express router
 const router = express.Router();
@@ -16,6 +16,7 @@ const MIME_TYPE_MAP = {
     'image/jpg': 'jpg'
 };
 
+// Configure image storate for uploaded images
 const storage = multer.diskStorage({
     // set desination
     destination: (req, file, cb) => {
@@ -39,7 +40,7 @@ const storage = multer.diskStorage({
 
 // Posting a new app
 // Use multer with storage config to expect a single image file
-router.post('', multer({ storage: storage }).single("image"), (req, res, next) => {
+router.post('', checkAuth, multer({ storage: storage }).single("image"), (req, res, next) => {
     // get main server url
     const url = req.protocol + '://' + req.get('host');
     // Create a new mongoose model for the post
@@ -115,7 +116,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 // update a specific post in the database by its id segment
-router.patch("/:id", multer({ storage: storage }).single("image"), (req, res, next) => {
+router.patch("/:id", checkAuth, multer({ storage: storage }).single("image"), (req, res, next) => {
     let imagePath = req.body.imagePath;
     // If request includes imge as a file set image path to this instead
     if (req.file) {
@@ -140,7 +141,7 @@ router.patch("/:id", multer({ storage: storage }).single("image"), (req, res, ne
 
 // :id is a dynamic path segment, since id's are generated in the database
 // i.e. api/posts/a;lkejfqawe
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
     Post.deleteOne({ _id: req.params.id })
         .then(result => {
            console.log(result);
