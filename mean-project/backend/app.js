@@ -57,22 +57,18 @@ app.post("/api/posts", (req, res, next) => {
 
 // Return dummy post data when hit with a get request
 app.get('/api/posts', (req, res, next) => {
-    const posts = [
-        { 
-            id: 'sdlkfjoiwe', 
-            title: 'First serverside post.', 
-            content: 'This is coming from the backend.' 
-        },
-        {
-            id: 'adlkfjoweijf',
-            title: 'Second serverside post',
-            content: 'This is coming from the server.'
-        }
-    ];
-    res.status(200).json({
-        message: 'Posts fetched successfully!',
-        posts: posts
-    });
+    // Return all entries in the mongo collection for the Post model
+    Post.find()
+        .then(documents => {
+            // Wait for the documents to arrive then format response
+            res.status(200).json({
+                message: 'Posts fetched successfully!',
+                posts: documents
+            });
+        })
+        .catch(errors => {
+            console.log(errors);
+        });
 });
 
 // export the app for use in other files
