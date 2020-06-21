@@ -104,7 +104,7 @@ export class PostsService {
           id,
           title,
           content,
-          imagePath: response.imagePath
+          imagePath: ''
         }
         updatedPosts[oldPostInex] = post;
         this.posts = updatedPosts;
