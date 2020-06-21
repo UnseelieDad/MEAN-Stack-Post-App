@@ -39,16 +39,28 @@ export class PostCreateComponent implements OnInit{
     }
   }
 
+  // When the user chooses an image to upload from the file picker
+  onImagePicked(event: Event) {
+    // Angular doesn't inherently know that event is a file input
+    const file = (event.target as HTMLInputElement).files[0];
+    // patchValue allows for targeting a single control on a form
+    this.form.patchValue({ image: file });
+    // Update value and validity of the newly added image
+    this.form.get('image').updateValueAndValidity();
+  }
+
   ngOnInit() {
     // A reactive form to use for validating posts
     // Initial values are null unless the post is being edited
     this.form = new FormGroup({
-      'title': new FormControl(null, { 
+      title: new FormControl(null, { 
         validators: [Validators.required, Validators.minLength(3)]
       }),
-      'content': new FormControl(null, { validators: [Validators.required] })
+      content: new FormControl(null, { validators: [Validators.required] }),
+      // No need to bind this to an html element
+      image: new FormControl(null, { validators: [Validators.required] })
     });
-    
+
     // Param map is a built in observable
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       // Check for a post id in the route path for editing

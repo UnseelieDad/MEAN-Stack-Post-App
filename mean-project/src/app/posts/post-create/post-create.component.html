@@ -16,7 +16,7 @@
         <!-- Image Upload -->
         <div>
             <button mat-stroked-button type="button" color="primary" (click)="filePicker.click()">Pick Image</button>
-            <input type="file" #filePicker>
+            <input type="file" #filePicker (change)="onImagePicked($event)">
         </div>
         <!-- Post Content -->
         <mat-form-field>
