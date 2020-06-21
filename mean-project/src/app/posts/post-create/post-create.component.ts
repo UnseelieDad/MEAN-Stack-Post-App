@@ -92,10 +92,11 @@ export class PostCreateComponent implements OnInit{
         this.postsService.getPostById(this.postId).subscribe(postData => {
           // stop progress spinner
           this.isLoading = false;
-          this.post = { 
-            id: postData._id, 
-            title: postData.title, 
-            content: postData.content 
+          this.post = {
+            id: postData._id,
+            title: postData.title,
+            content: postData.content,
+            imagePath: null
           }
           // Set form values to old post values when editing
           this.form.setValue({ 

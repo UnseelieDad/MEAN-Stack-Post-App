@@ -4,6 +4,7 @@ const multer = require('multer');
 
 // Import post model
 const Post = require('../models/post');
+const { create } = require('../models/post');
 
 // use express router
 const router = express.Router();
@@ -39,10 +40,13 @@ const storage = multer.diskStorage({
 // Posting a new app
 // Use multer with storage config to expect a single image file
 router.post('', multer({ storage: storage }).single("image"), (req, res, next) => {
+    // get main server url
+    const url = req.protocol + '://' + req.get('host');
     // Create a new mongoose model for the post
     const post = new Post({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: url + '/images/' + req.file.filename
     });
     // save post to database
     post.save()
@@ -52,10 +56,12 @@ router.post('', multer({ storage: storage }).single("image"), (req, res, next) =
         .then(createdPost => {
             res.status(201).json({
                 message: "Post added successfully!",
-                postId: createdPost._id
+                post: {
+                    id: createdPost._id,
+                    ...createdPost
+                }
             });
         });
-    console.log(post);
 });
 
 // Return dummy post data when hit with a get request

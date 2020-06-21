@@ -27,7 +27,8 @@ export class PostsService {
         return {
           id: post._id,
           title: post.title,
-          content: post.content
+          content: post.content,
+          imagePath: post.imagePath
         };
       });
     }))
@@ -59,12 +60,13 @@ export class PostsService {
     postData.append('image', image, title);
 
     this.http
-      .post<{message: string, postId: string}>('http://localhost:3000/api/posts', postData)
+      .post<{message: string, post: Post}>('http://localhost:3000/api/posts', postData)
       .subscribe((responseData) => {
         const post: Post = { 
-          id: responseData.postId,
+          id: responseData.post.id,
           title,
-          content
+          content,
+          imagePath: responseData.post.imagePath
         };
         // Only update posts locally if successfully added to the server
         this.posts.push(post);
@@ -74,7 +76,7 @@ export class PostsService {
 
   // Update a post after editing
   updatePost(id: string, title: string, content: string) {
-    const post: Post = { id, title, content };
+    const post: Post = { id, title, content, imagePath: null };
     this.http.patch('http://localhost:3000/api/posts/' + id, post)
       .subscribe(response => {
         // If updaing on the backend is successful, update the post by its index
