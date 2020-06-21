@@ -43,7 +43,7 @@ export class PostsService {
   getPostById(id: string) {
     // Can only return the observable here,
     // the rest is handled in post-create component
-    return this.http.get<{_id: string, title: string, content: string}>('http://localhost:3000/api/posts/' + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string}>('http://localhost:3000/api/posts/' + id);
   }
 
   // return the postsUpdated subject for subscribing
@@ -75,14 +75,37 @@ export class PostsService {
   }
 
   // Update a post after editing
-  updatePost(id: string, title: string, content: string) {
-    const post: Post = { id, title, content, imagePath: null };
-    this.http.patch('http://localhost:3000/api/posts/' + id, post)
+  updatePost(id: string, title: string, content: string, image: File | string) {
+    let postData: Post | FormData;
+    if (typeof(image) === 'object') {
+      // image is a File, update using a form
+      postData = new FormData();
+      postData.append('id', id);
+      postData.append('title', title);
+      postData.append('content', title);
+      postData.append('image', image, title);
+    } else {
+      // image is a string, update it as an object
+      postData = {
+        id,
+        title,
+        content,
+        imagePath: image
+      };
+    }
+
+    this.http.patch('http://localhost:3000/api/posts/' + id, postData)
       .subscribe(response => {
         // If updaing on the backend is successful, update the post by its index
         // in the frontend array.
         const updatedPosts = [...this.posts];
-        const oldPostInex = updatedPosts.findIndex(p => p.id === post.id);
+        const oldPostInex = updatedPosts.findIndex(p => p.id === id);
+        const post: Post = {
+          id,
+          title,
+          content,
+          imagePath: response.imagePath
+        }
         updatedPosts[oldPostInex] = post;
         this.posts = updatedPosts;
         this.updateAndReturn();

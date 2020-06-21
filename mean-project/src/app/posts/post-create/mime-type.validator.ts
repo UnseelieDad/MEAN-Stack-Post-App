@@ -1,8 +1,12 @@
 import { AbstractControl } from '@angular/forms';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
 
 // Returns either a Promise or Observable with a dynamic key name with any value
 export const mimeType = (control: AbstractControl): Promise<{ [key: string]: any }> | Observable<{ [key: string]: any }> => {
+    // Return a valid observable if the image is a string instead of a file
+    if (typeof(control.value) === 'string') {
+        return of(null);
+    }
     const file = control.value as File;
     const fileReader = new FileReader();
     // Need to return an observable so the onload type function in post-create won't work here

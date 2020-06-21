@@ -96,11 +96,19 @@ router.get('/:id', (req, res, next) => {
 });
 
 // update a specific post in the database by its id segment
-router.patch("/:id", (req, res, next) => {
+router.patch("/:id", multer({ storage: storage }).single("image"), (req, res, next) => {
+    let imagePath = req.body.imagePath;
+    // If request includes imge as a file set image path to this instead
+    if (req.file) {
+        // get main server url
+        const url = req.protocol + '://' + req.get('host');
+        imagePath = url + '/images/' + req.file.filename;
+    }
     const post = new Post({
         _id: req.body.id,
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: imagePath
     });
     Post.updateOne({ _id: req.params.id }, post)
         .then(result => {
