@@ -48,11 +48,17 @@ app.post("/api/posts", (req, res, next) => {
         content: req.body.content
     });
     // save post to database
-    post.save();
-    console.log(post)
-    res.status(201).json({
-        message: "Post added successfully!"
-    });
+    post.save()
+    // Get teh returned post with the generated id
+    // and send the id back in the response so it can be set
+    // in the frontend
+        .then(createdPost => {
+            res.status(201).json({
+                message: "Post added successfully!",
+                postId: createdPost._id
+            });
+        });
+    console.log(post);
 });
 
 // Return dummy post data when hit with a get request
