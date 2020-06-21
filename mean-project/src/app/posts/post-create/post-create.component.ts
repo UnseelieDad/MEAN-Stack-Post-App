@@ -99,9 +99,9 @@ export class PostCreateComponent implements OnInit{
             imagePath: null
           }
           // Set form values to old post values when editing
-          this.form.setValue({ 
-            'title': this.post.title, 
-            'content': this.post.content 
+          this.form.setValue({
+            'title': this.post.title,
+            'content': this.post.content
           });
         });
       } else {

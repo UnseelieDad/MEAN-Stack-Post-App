@@ -1,3 +1,5 @@
+// For constructing paths
+const path = require('path');
 // Import express
 const express = require('express');
 // Import parser for incoming JSON data
@@ -24,6 +26,8 @@ mongoose.connect("mongodb+srv://Seth:uOq2M0U8E0ZFvgRM@cluster0-fxnvy.mongodb.net
 app.use(bodyParser.json());
 // Parse encoded urls
 app.use(bodyParser.urlencoded({ extended: false }));
+// Make images folder accessible
+app.use('/images', express.static(path.join('backend/images')));
 
 // Set CORS access so that request goes through regardless of domain
 app.use((req, res, next) => {

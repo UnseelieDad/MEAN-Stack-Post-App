@@ -58,7 +58,9 @@ router.post('', multer({ storage: storage }).single("image"), (req, res, next) =
                 message: "Post added successfully!",
                 post: {
                     id: createdPost._id,
-                    ...createdPost
+                    title: createdPost.title,
+                    content: createdPost.content,
+                    imagePath: createdPost.imagePath
                 }
             });
         });
