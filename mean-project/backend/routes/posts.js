@@ -1,4 +1,6 @@
 const express = require('express');
+// Use multer to handle image uploading
+const multer = require('multer');
 
 // Import post model
 const Post = require('../models/post');
@@ -6,8 +8,37 @@ const Post = require('../models/post');
 // use express router
 const router = express.Router();
 
+// Create a map of mime types and thier corresponding extensions
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+    // set desination
+    destination: (req, file, cb) => {
+        const isValid = MIME_TYPE_MAP[file.mimetype];
+        let error = new Error("Invalid mime type");
+        if (isValid) {
+            error = null;
+        }
+        // use callback function to set destination
+        cb(error, "backend/images");
+    },
+    filename = (req, file, cb) => {
+        // get a normalized version of the file name
+        const name = file.originalname.toLowerCase().split(' ').join('-');
+        // get the file extension
+        const ext = MIME_TYPE_MAP[file.mimetype];
+        // return a unique filename
+        cb(null, name + '-' + Date.now() + '.' + ext);
+    }
+});
+
 // Posting a new app
-router.post('', (req, res, next) => {
+// Use multer with storage config to expect a single image file
+router.post('', multer(storage).single("image"), (req, res, next) => {
     // Create a new mongoose model for the post
     const post = new Post({
         title: req.body.title,
