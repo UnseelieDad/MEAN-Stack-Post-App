@@ -36,7 +36,7 @@ app.use((req, res, next) => {
     // Allow cors access for listed header types
     res.setHeader(
         'Access-Control-Allow-Headers', 
-        "Origin, X-Requested-With, Content-Type, Accept"
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
     // Allow listed HTTP methods
     // May need to add PUT here later
