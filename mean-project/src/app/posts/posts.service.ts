@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 import { Post } from './post.model';
 
@@ -16,9 +17,21 @@ export class PostsService {
   
   // Get the current list of posts from the server
   getPosts() {
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
-      .subscribe((postData) => {
-        this.posts = postData.posts;
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+    // Use pipe to execute the map operator on the observable from the backend
+    // so that _id is formated as id
+    .pipe(map(postData => {
+      // for each post in postData, return a properly formated post
+      return postData.posts.map(post => {
+        return {
+          id: post._id,
+          title: post.title,
+          content: post.content
+        };
+      });
+    }))
+    .subscribe((formatedPosts) => {
+        this.posts = formatedPosts;
         // update subject with new posts
         this.postsUpdated.next([...this.posts]);
       });
