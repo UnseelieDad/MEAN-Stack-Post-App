@@ -22,7 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     // Get the current list of posts
-    this.posts = this.postsService.getPosts();
+    this.postsService.getPosts();
     // get new posts from the service wheneer one is added
     this.postsSub = this.postsService.getPostUpdateListener()
       .subscribe((posts: Post[]) => {
