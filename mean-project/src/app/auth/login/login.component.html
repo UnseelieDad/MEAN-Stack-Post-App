@@ -1,29 +1,43 @@
 <mat-card>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <form *ngIf="!isLoading">
-        <!-- User Email -->
-        <mat-form-field>
-            <!-- Use '?' in the binds for title and content to make sure angular checks 
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onLogin()" #loginForm="ngForm" *ngIf="!isLoading">
+    <!-- User Email -->
+    <mat-form-field>
+      <!-- Use '?' in the binds for title and content to make sure angular checks 
             if the values exist. If they don't, populate the fields with nothing. -->
-            <input 
-                matInput 
-                type="email"
-                placeholder="Email Address"
-            >
-            <mat-error *ngIf="">Please enter a valid email.</mat-error>
-        </mat-form-field>
-        
-        <!-- User Password -->
-        <mat-form-field>
-            <input matInput type="password" placeholder="Password">
-            <mat-error *ngIf="">Please enter a valid password.</mat-error>
-        </mat-form-field>
-        <!-- Button for saving a post -->
-        <button 
-            mat-raised-button 
-            type="submit"
-            color="accent">
-        Login</button>
-    </form>
-</mat-card>
+      <input
+        matInput
+        name="email"
+        ngModel
+        type="email"
+        placeholder="Email Address"
+        #emailInput="ngModel"
+        required
+        email
+      />
+      <mat-error *ngIf="emailInput.invalid"
+        >Please enter a valid email.</mat-error
+      >
+    </mat-form-field>
 
+    <!-- User Password -->
+    <mat-form-field>
+      <input
+        matInput
+        name="password"
+        ngModel
+        type="password"
+        placeholder="Password"
+        #passwordInput="ngModel"
+        required
+      />
+      <mat-error *ngIf="passwordInput.invalid"
+        >Please enter a valid password.</mat-error
+      >
+    </mat-form-field>
+    <!-- Button for saving a post -->
+    <button mat-raised-button type="submit" color="accent">
+      Login
+    </button>
+  </form>
+</mat-card>
