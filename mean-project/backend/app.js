@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const postRoutes = require('./routes/posts');
+const authRoutes = require('./routes/auth');
 
 // Create an express app
 const app = express();
@@ -45,6 +46,8 @@ app.use((req, res, next) => {
 
 // Use routes defined in posts.js
 app.use('/api/posts', postRoutes);
+// Use routes defined in auth.js
+app.use('/api/auth', authRoutes);
 
 // export the app for use in other files
 module.exports = app;
