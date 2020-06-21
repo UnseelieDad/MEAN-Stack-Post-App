@@ -1,11 +1,25 @@
 // Import express
 const express = require('express');
-
 // Import parser for incoming JSON data
 const bodyParser = require('body-parser');
+// Import Mongoose to work with the database
+const mongoose = require('mongoose');
+
+// Import post model
+const Post = require('./models/post');
 
 // Create an express app
 const app = express();
+
+// Connect to the mongodb database
+mongoose.connect("mongodb+srv://Seth:uOq2M0U8E0ZFvgRM@cluster0-fxnvy.mongodb.net/mean-app?retryWrites=true&w=majority",
+{ useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Connected to database!')
+    })
+    .catch(() => {
+        console.log('Connection failed');
+    });
 
 // Parse any incoming json data
 app.use(bodyParser.json());
@@ -26,9 +40,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// Posting a new app
 app.post("/api/posts", (req, res, next) => {
-    const post = req.body;
-    console.log(post);
+    // Create a new mongoose model for the post
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content
+    });
+    // save post to database
+    post.save();
+    console.log(post)
     res.status(201).json({
         message: "Post added successfully!"
     });
