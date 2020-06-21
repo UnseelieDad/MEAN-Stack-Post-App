@@ -68,9 +68,20 @@ router.post('', multer({ storage: storage }).single("image"), (req, res, next) =
 
 // Return dummy post data when hit with a get request
 router.get('', (req, res, next) => {
+    // Query parameters for pagination
+    const pageSize = +req.query.pageSize;
+    const currentPage = +req.query.page;
+    const postQuery = Post.find();
+    // if query parameters present, adjust the database query
+    if (pageSize && currentPage) {
+        postQuery
+            // skip previous pages
+            .skip(pageSize * currentPage - 1)
+            // limit returned pages to page size
+            .limit(pageSize);
+    }
     // Return all entries in the mongo collection for the Post model
-    Post.find()
-        .then(documents => {
+    postQuery.then(documents => {
             // Wait for the documents to arrive then format response
             res.status(200).json({
                 message: 'Posts fetched successfully!',
