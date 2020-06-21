@@ -17,22 +17,27 @@ export class PostListComponent implements OnInit, OnDestroy{
   totalPosts = 10;
   postsPerPage = 2;
   pageSizeOptions = [1, 2, 5, 10];
+  currentPage = 1;
 
   constructor(private postsService: PostsService) {}
 
+  // Delete a post
   onDelete(postId: string) {
     this.postsService.deletePost(postId);
   }
 
+  // Change pages in the paginator
   onChangedPage(pageData: PageEvent) {
-
+    this.currentPage = pageData.pageIndex + 1;
+    this.postsPerPage = pageData.pageSize;
+    this.postsService.getPosts(this.postsPerPage, this.currentPage);
   }
 
   ngOnInit() {
     // Start loading spinner
     this.isLoading = true;
     // Get the current list of posts
-    this.postsService.getPosts();
+    this.postsService.getPosts(this.postsPerPage, this.currentPage);
     // get new posts from the service wheneer one is added
     this.postsSub = this.postsService.getPostUpdateListener()
       .subscribe((posts: Post[]) => {

@@ -15,10 +15,12 @@ export class PostsService {
   private postsUpdated = new Subject<Post[]>();
 
   constructor(private http: HttpClient, private router: Router) {}
-   
+
   // Get the current list of posts from the server
-  getPosts() {
-    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+  getPosts(postsPerPage: number, currentPage: number) {
+    // query parameters for pagination
+    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts' + queryParams)
     // Use pipe to execute the map operator on the observable from the backend
     // so that _id is formated as id
     .pipe(map(postData => {
