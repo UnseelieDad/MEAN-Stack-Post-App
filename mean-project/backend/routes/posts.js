@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
         // use callback function to set destination
         cb(error, "backend/images");
     },
-    filename = (req, file, cb) => {
+    filename: (req, file, cb) => {
         // get a normalized version of the file name
         const name = file.originalname.toLowerCase().split(' ').join('-');
         // get the file extension
@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
 
 // Posting a new app
 // Use multer with storage config to expect a single image file
-router.post('', multer(storage).single("image"), (req, res, next) => {
+router.post('', multer({ storage: storage }).single("image"), (req, res, next) => {
     // Create a new mongoose model for the post
     const post = new Post({
         title: req.body.title,

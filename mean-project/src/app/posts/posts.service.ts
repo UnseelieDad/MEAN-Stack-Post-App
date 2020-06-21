@@ -51,18 +51,21 @@ export class PostsService {
   }
 
   // Add a post to the list of posts
-  addPost(title: string, content: string) {
-    const post: Post = {
-      id: null,
-      title,
-      content
-    };
+  addPost(title: string, content: string, image: File) {
+    const postData = new FormData();
+    postData.append('title', title);
+    postData.append('content', content);
+    // Use the submitted image and the title as its name
+    postData.append('image', image, title);
+
     this.http
-      .post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
+      .post<{message: string, postId: string}>('http://localhost:3000/api/posts', postData)
       .subscribe((responseData) => {
-        const id = responseData.postId;
-        // Set the post id to the generated id from the database
-        post.id = id;
+        const post: Post = { 
+          id: responseData.postId,
+          title,
+          content
+        };
         // Only update posts locally if successfully added to the server
         this.posts.push(post);
         this.updateAndReturn();

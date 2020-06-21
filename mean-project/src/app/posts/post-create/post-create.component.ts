@@ -25,12 +25,17 @@ export class PostCreateComponent implements OnInit{
     if (this.form.valid){
       // Start loading spinner
       this.isLoading = true;
+      // If a new post save a new post 
       if (this.mode === 'create') {
-        this.postsService.addPost(this.form.value.title, this.form.value.content);
-      } else {
+        this.postsService.addPost(
+          this.form.value.title,
+          this.form.value.content,
+          this.form.value.image
+        );
+      } else { // If eding a post update it instead
         this.postsService.updatePost(
-          this.postId, 
-          this.form.value.title, 
+          this.postId,
+          this.form.value.title,
           this.form.value.content
         );
       }
@@ -68,7 +73,7 @@ export class PostCreateComponent implements OnInit{
       }),
       content: new FormControl(null, { validators: [Validators.required] }),
       // No need to bind this to an html element
-      image: new FormControl(null, { 
+      image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType] // use the created mimeType validator to validate the image file
       })
