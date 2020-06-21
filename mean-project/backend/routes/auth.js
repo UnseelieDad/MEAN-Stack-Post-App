@@ -1,4 +1,4 @@
-const express = reuire("express");
+const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 // Import the user model
@@ -28,6 +28,6 @@ router.post("/signup", (req, res, next) => {
   });
 });
 
-router.post();
+//router.post();
 
 module.exports = router;
