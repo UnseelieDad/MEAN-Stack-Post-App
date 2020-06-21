@@ -72,6 +72,7 @@ router.get('', (req, res, next) => {
     const pageSize = +req.query.pageSize;
     const currentPage = +req.query.page;
     const postQuery = Post.find();
+    let fetchedPosts;
     // if query parameters present, adjust the database query
     if (pageSize && currentPage) {
         postQuery
@@ -81,11 +82,18 @@ router.get('', (req, res, next) => {
             .limit(pageSize);
     }
     // Return all entries in the mongo collection for the Post model
-    postQuery.then(documents => {
-            // Wait for the documents to arrive then format response
+    postQuery
+        .then(documents => {
+            // get teh documents then query the number of posts
+            fetchedPosts = documents;
+            return Post.count();
+        })
+        .then(count => {
+            // Return posts and their count
             res.status(200).json({
                 message: 'Posts fetched successfully!',
-                posts: documents
+                posts: fetchedPosts,
+                maxPosts: count
             });
         })
         .catch(errors => {
