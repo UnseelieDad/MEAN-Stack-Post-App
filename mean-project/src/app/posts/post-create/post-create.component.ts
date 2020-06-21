@@ -15,6 +15,7 @@ export class PostCreateComponent implements OnInit{
   post: Post;
   isLoading = false;
   form: FormGroup;
+  imagePreview: string;
 
   constructor(private postsService: PostsService, private route: ActivatedRoute) {}
 
@@ -47,6 +48,14 @@ export class PostCreateComponent implements OnInit{
     this.form.patchValue({ image: file });
     // Update value and validity of the newly added image
     this.form.get('image').updateValueAndValidity();
+    // Convert image to data URL for the image tag
+    const reader = new FileReader();
+    // When the reader loads, set the image preview as the result
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    // Kick off the onload function with the uploaded file
+    reader.readAsDataURL(file);
   }
 
   ngOnInit() {
