@@ -13,14 +13,16 @@ export class PostCreateComponent implements OnInit{
   private mode = 'create';
   private postId: string;
   post: Post;
+  isLoading = false;
 
   constructor(private postsService: PostsService, private route: ActivatedRoute) {}
 
   // function  for adding a post to the site
   onAddPost(form: NgForm) {
     if (form.valid){
-    
-      if (this.mode ==='create') {
+      // Start loading spinner
+      this.isLoading = true;
+      if (this.mode === 'create') {
         this.postsService.addPost(form.value.title, form.value.content);
       } else {
         this.postsService.updatePost(this.postId, form.value.title, form.value.content);
@@ -40,8 +42,12 @@ export class PostCreateComponent implements OnInit{
         // If the postId exists, get that post for edting
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
+        // show progress spinner
+        this.isLoading = true;
         // getPostById returns an observable with the updated post fetched from the server
         this.postsService.getPostById(this.postId).subscribe(postData => {
+          // stop progress spinner
+          this.isLoading = false;
           this.post = { id: postData._id, title: postData.title, content: postData.content }
         });
       } else {

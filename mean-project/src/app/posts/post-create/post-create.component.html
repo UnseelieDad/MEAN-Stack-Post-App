@@ -1,6 +1,7 @@
 <mat-card>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
     <!-- Local reference allows access to the form object in ts -->
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+    <form (submit)="onAddPost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
         <!-- User input for a new or edited post -->
         <mat-form-field>
             <!-- Use '?' in the binds for title and content to make sure angular checks 

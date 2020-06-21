@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, subscribeOn } from 'rxjs/operators';
 
 import { Post } from './post.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
    
   // Get the current list of posts from the server
   getPosts() {
@@ -64,8 +65,7 @@ export class PostsService {
         post.id = id;
         // Only update posts locally if successfully added to the server
         this.posts.push(post);
-        // update subject withth new post
-        this.postsUpdated.next([...this.posts]);
+        this.updateAndReturn();
       });
   }
 
@@ -80,7 +80,7 @@ export class PostsService {
         const oldPostInex = updatedPosts.findIndex(p => p.id === post.id);
         updatedPosts[oldPostInex] = post;
         this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
+        this.updateAndReturn();
       });
   }
 
@@ -93,5 +93,14 @@ export class PostsService {
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
     });
+  }
+
+  // Helper method that updates the posts on the frontend
+  // and navigates user back to the posts page
+  updateAndReturn() {
+    // Let other components know that the posts array was updated
+    this.postsUpdated.next([...this.posts]);
+    // Navigate back to the main page
+    this.router.navigate(['/']);
   }
 }
