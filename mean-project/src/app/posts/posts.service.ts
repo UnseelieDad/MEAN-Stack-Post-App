@@ -36,8 +36,14 @@ export class PostsService {
       title,
       content
     };
-    this.posts.push(post);
-    // update subject withth new post
-    this.postsUpdated.next([...this.posts]);
+    this.http
+      .post<{message: string}>('http://localhost:3000/api/posts', post)
+      .subscribe((responseData) => {
+        console.log(responseData.message);
+        // Only update posts locally if successfully added to the server
+        this.posts.push(post);
+        // update subject withth new post
+        this.postsUpdated.next([...this.posts]);
+      });
   }
 }
