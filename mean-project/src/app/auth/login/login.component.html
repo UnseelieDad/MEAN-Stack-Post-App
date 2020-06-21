@@ -1,6 +1,6 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form (submit)="onLogin()" #loginForm="ngForm" *ngIf="!isLoading">
+  <form (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading">
     <!-- User Email -->
     <mat-form-field>
       <!-- Use '?' in the binds for title and content to make sure angular checks 
