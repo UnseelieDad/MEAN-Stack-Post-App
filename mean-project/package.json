@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "spinup": "nodemon server.js"
+    "spinup": "nodemon ./backend/server.js"
   },
   "private": true,
   "dependencies": {
