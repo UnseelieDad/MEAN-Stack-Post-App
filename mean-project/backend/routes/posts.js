@@ -70,6 +70,11 @@ router.post(
             imagePath: createdPost.imagePath,
           },
         });
+      })
+      .catch(error => {
+        res.status(500).json({
+          message: 'Creating a post failed!'
+        });
       });
   }
 );
@@ -105,7 +110,9 @@ router.get("", (req, res, next) => {
       });
     })
     .catch((errors) => {
-      console.log(errors);
+      res.status(500).json({
+        message: 'Failed to retrieve posts!'
+      });
     });
 });
 
@@ -118,7 +125,12 @@ router.get("/:id", (req, res, next) => {
         message: "Post not found!",
       });
     }
-  });
+  })
+  .catch((errors) => {
+    res.status(500).json({
+      message: 'Failed to retrieve posts!'
+    });
+  });;
 });
 
 // update a specific post in the database by its id segment
@@ -156,6 +168,11 @@ router.patch(
           message: "Not Authorized",
         });
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Couldn\'t update post!'
+      });
     });
   }
 );
@@ -174,7 +191,12 @@ router.delete("/:id", checkAuth, (req, res, next) => {
           message: "Not Authorized",
         });
       }
-  });
+  })
+  .catch((errors) => {
+    res.status(500).json({
+      message: 'Failed to delete post!'
+    });
+  });;
 });
 
 module.exports = router;

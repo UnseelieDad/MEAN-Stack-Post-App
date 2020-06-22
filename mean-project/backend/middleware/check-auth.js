@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
         next();
     } catch (error) {
         res.status(401).json({
-            message: 'Auth failed, token failed to verify.',
+            message: 'Token failed to verify, you are not authenticated.',
             error: error
         });
     }
