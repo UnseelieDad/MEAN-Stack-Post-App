@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 // Parse encoded urls
 app.use(bodyParser.urlencoded({ extended: false }));
 // Make images folder accessible
-app.use('/images', express.static(path.join('backend/images')));
+app.use('/images', express.static(path.join('images')));
 
 // Set CORS access so that request goes through regardless of domain
 app.use((req, res, next) => {

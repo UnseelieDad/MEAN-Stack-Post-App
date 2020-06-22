@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
       error = null;
     }
     // use callback function to set destination
-    cb(error, "backend/images");
+    cb(error, "images");
   },
   filename: (req, file, cb) => {
     // get a normalized version of the file name
