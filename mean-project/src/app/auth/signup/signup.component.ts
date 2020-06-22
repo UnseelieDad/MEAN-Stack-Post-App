@@ -17,6 +17,7 @@ export class SignupComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     // Submit new user to the backend
     this.authService.createUser(form.value.email, form.value.password);
 
