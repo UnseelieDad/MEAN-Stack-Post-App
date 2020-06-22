@@ -60,7 +60,8 @@ router.post('/login', (req, res, next) => {
           // Send token up to the frontend
           res.status(200).json({
             message: 'User logged in!',
-            token: token
+            token: token,
+            expiresIn: 3600
           });
         })
         .catch(err => {
