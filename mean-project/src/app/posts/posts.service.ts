@@ -6,6 +6,10 @@ import { map, subscribeOn } from 'rxjs/operators';
 import { Post } from './post.model';
 import { Router } from '@angular/router';
 
+import { environment } from '../../environments/environment';
+
+const BACKEND_URL = environment.apiURL + '/posts/';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +25,7 @@ export class PostsService {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
     this.http
       .get<{ message: string; posts: any; maxPosts: number }>(
-        'http://localhost:3000/api/posts' + queryParams
+        BACKEND_URL + queryParams
       )
       // Use pipe to execute the map operator on the observable from the backend
       // so that _id is formated as id
@@ -62,7 +66,7 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
-    }>('http://localhost:3000/api/posts/' + id);
+    }>(BACKEND_URL + id);
   }
 
   // return the postsUpdated subject for subscribing
@@ -80,7 +84,7 @@ export class PostsService {
 
     this.http
       .post<{ message: string; post: Post }>(
-        'http://localhost:3000/api/posts',
+        BACKEND_URL,
         postData
       )
       .subscribe((responseData) => {
@@ -110,7 +114,7 @@ export class PostsService {
     }
 
     this.http
-      .patch('http://localhost:3000/api/posts/' + id, postData)
+      .patch(BACKEND_URL + id, postData)
       .subscribe((response) => {
         // Don't need to update here or in post because the user is
         // navigated back to the main page which fires off a get request on init
@@ -120,6 +124,6 @@ export class PostsService {
 
   // Delete a post
   deletePost(postId: string) {
-    return this.http.delete('http://localhost:3000/api/posts/' + postId);
+    return this.http.delete(BACKEND_URL + postId);
   }
 }
