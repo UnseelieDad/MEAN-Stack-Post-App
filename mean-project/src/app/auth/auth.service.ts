@@ -35,11 +35,15 @@ export class AuthService {
   // Send new user data to the backend
   createUser(email: string, password: string) {
     const authData: AuthData = { email, password };
-    this.http
+    return this.http
       .post('http://localhost:3000/api/auth/signup', authData)
-      .subscribe((response) => {
-        this.router.navigate(['/']);
-      });
+        .subscribe(() => {
+          this.router.navigate(['/']);
+        }, error => {
+          // if creating a user errors, emit false so signup
+          // stops loading
+          this.authStatusListener.next(false);
+        });
   }
 
   loginUser(email: string, password: string) {
@@ -67,6 +71,8 @@ export class AuthService {
           this.saveAuthData(token, expirationDate, this.userId);
           this.router.navigate(['/']);
         }
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 
