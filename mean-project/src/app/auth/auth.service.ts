@@ -86,7 +86,6 @@ export class AuthService {
   }
 
   private setAuthTimer(duration: number) {
-    console.log("Setting timer to " + duration)
     this.tokenTimer = setTimeout(() => {
       this.logoutUser();
     }, duration * 1000); // expire duration in seconds needs to convert to miliseconds
