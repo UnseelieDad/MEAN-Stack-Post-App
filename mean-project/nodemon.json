@@ -1,0 +1,6 @@
+{
+    "env": {
+        "MONGO_ATLAS_PW": "uOq2M0U8E0ZFvgRM",
+        "JWT_KEY": "secret_though_I_walk_through_the_valley_of_the_shadow_of_death_I_will_fear_no_evil"
+    }
+}

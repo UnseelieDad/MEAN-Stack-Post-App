@@ -14,7 +14,7 @@ const authRoutes = require('./routes/auth');
 const app = express();
 
 // Connect to the mongodb database
-mongoose.connect("mongodb+srv://Seth:uOq2M0U8E0ZFvgRM@cluster0-fxnvy.mongodb.net/mean-app?retryWrites=true&w=majority",
+mongoose.connect("mongodb+srv://Seth:" + process.env.MONGO_ATLAS_PW + "@cluster0-fxnvy.mongodb.net/mean-app?retryWrites=true&w=majority",
 { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Connected to database!')

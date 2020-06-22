@@ -51,7 +51,7 @@ exports.userLogin = (req, res, next) => {
         // Keep track of user with a json web token
         const token = jwt.sign(
           { emai: fetchedUser.email, userId: fetchedUser._id },
-          "secret_though_I_walk_through_the_valley_of_the_shadow_of_death_I_will_fear_no_evil",
+          process.env.JWT_KEY,
           { expiresIn: "1h" }
         );
         // Send token up to the frontend
