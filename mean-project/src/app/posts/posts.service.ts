@@ -35,7 +35,7 @@ export class PostsService {
                 title: post.title,
                 content: post.content,
                 imagePath: post.imagePath,
-                creator: post.creator
+                creator: post.creator,
               };
             }),
             maxPosts: postData.maxPosts,
@@ -61,6 +61,7 @@ export class PostsService {
       title: string;
       content: string;
       imagePath: string;
+      creator: string;
     }>('http://localhost:3000/api/posts/' + id);
   }
 
@@ -104,13 +105,14 @@ export class PostsService {
         title,
         content,
         imagePath: image,
+        creator: null,
       };
     }
 
     this.http
       .patch('http://localhost:3000/api/posts/' + id, postData)
       .subscribe((response) => {
-        // Don't need to update here or in post because the user is 
+        // Don't need to update here or in post because the user is
         // navigated back to the main page which fires off a get request on init
         this.router.navigate(['/']);
       });
