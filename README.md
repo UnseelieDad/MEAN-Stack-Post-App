@@ -1,5 +1,6 @@
 # MEAN Stack Posting app
  This is a quick project to practice and refresh myself on the MEAN stack.
+ (Angular front end, NodeJS/Express Rest API, MongoDB Database)
  Features include: 
  - The ability to create an account, log-in and make posts 
  - Posts include a title, picture uploaded fromm the user, and content. 
